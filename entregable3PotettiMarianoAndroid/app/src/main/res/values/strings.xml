@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">entregable3PotettiMarianoAndroid</string>
+
+    <string name="facebook_app_id">1601630919947627</string>
+    <string name="fb_login_protocol_scheme">fb1601630919947627</string>
+
 </resources>
