@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".view.DetalleActivity"
+    android:gravity="center">
+
+    <android.support.v7.widget.CardView
+        android:layout_width="400dp"
+        android:layout_height="400dp"
+        app:cardElevation="10dp"
+        >
+    <TextView
+        android:id="@+id/textView_detalle_obra"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:text="nombre obra"
+        android:gravity="center"
+        android:textSize="30sp"/>
+    <ImageView
+        android:id="@+id/ImageView_detalle"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:layout_gravity="center"/>
+    <TextView
+        android:id="@+id/textView_detalle_nombre"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:text="nombre artista"
+        android:layout_gravity="center|bottom"
+        android:gravity="center"
+        android:textSize="30sp"/>
+
+    </android.support.v7.widget.CardView>
+
+</LinearLayout>
