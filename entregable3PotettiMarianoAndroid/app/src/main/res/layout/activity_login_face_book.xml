@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal"
+    android:orientation="vertical"
     tools:context=".view.LoginFaceBookActivity">
 
     <TextView
@@ -15,6 +15,29 @@
         android:gravity="right"
         android:id="@+id/irAMainTemporario"/>
 
+
+    <EditText
+        android:id="@+id/editTextEmail"
+        android:hint="email"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <EditText
+        android:id="@+id/editTextPass"
+        android:hint="password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <Button
+        android:text="Crear Cuenta"
+        android:id="@+id/BotonCrearUsuario"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <Button
+        android:text="Login"
+        android:id="@+id/BotonLogUsuario"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+
     <com.facebook.login.widget.LoginButton
         android:id="@+id/login_button"
         android:layout_width="wrap_content"
@@ -22,5 +45,18 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="30dp"
         android:layout_marginBottom="30dp" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="150dp">
 
-</RelativeLayout>
+    </View>
+
+    <Button
+        android:id="@+id/cerrar_sesion_button_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="CERRAR SESION"
+        android:layout_gravity="right"
+        />
+
+</LinearLayout>

@@ -9,13 +9,16 @@ import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.maria.entregable3potettimarianoandroid.R;
+import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.Profile;
+import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.firebase.auth.FirebaseAuth;
@@ -30,6 +33,7 @@ TextView textView;
     private LoginButton loginButton;
 
     private FirebaseAuth mAuth;
+    private Button cerrarSesionButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +84,24 @@ TextView textView;
 
 
         mAuth = FirebaseAuth.getInstance();
+        cerrarSesionButton = findViewById(R.id.cerrar_sesion_button_id);
+        cerrarSesionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+                    if (AccessToken.getCurrentAccessToken() != null) {
+                        //si es que esta logueado con facebook, tengo que desloguearlo
+                        LoginManager.getInstance().logOut();
+                    }
+                    //esto es para desloguearlo de firebase, ya se  que entro con facebok o nativo
+                    FirebaseAuth.getInstance().signOut();
+                    onBackPressed();
+
+
+                }
+            }
+        });
+
 
 
 
