@@ -55,4 +55,10 @@ public class MainActivity extends AppCompatActivity implements ObrasAdapter.Noti
         startActivity(intent);
 
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        onPause();
+    }
 }

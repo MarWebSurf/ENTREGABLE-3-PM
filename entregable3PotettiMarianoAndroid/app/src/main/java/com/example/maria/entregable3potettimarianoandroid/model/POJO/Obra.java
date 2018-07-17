@@ -1,15 +1,22 @@
 package com.example.maria.entregable3potettimarianoandroid.model.POJO;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.io.Serializable;
 
 public class Obra implements Serializable {
 
-    private String image;
+    @SerializedName("image")
+    private String rutaImagen;
     private String name;
     private String artistId;
 
-    public String getImage() {
-        return image;
+    public String getRutaImagen() {
+        return rutaImagen;
+    }
+
+    public void setRutaImagen(String rutaImagen) {
+        this.rutaImagen = rutaImagen;
     }
 
     public String getName() {
@@ -21,9 +28,6 @@ public class Obra implements Serializable {
     }
 
 
-    public void setImage(String image) {
-        this.image = image;
-    }
 
     public void setName(String name) {
         this.name = name;
