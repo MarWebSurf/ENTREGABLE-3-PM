@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.maria.entregable3potettimarianoandroid.R;
 import com.example.maria.entregable3potettimarianoandroid.controller.ControllerObras;
 import com.example.maria.entregable3potettimarianoandroid.model.POJO.Obra;
@@ -56,9 +57,6 @@ public class MainActivity extends AppCompatActivity implements ObrasAdapter.Noti
 
     }
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        onPause();
-    }
+
 }
+

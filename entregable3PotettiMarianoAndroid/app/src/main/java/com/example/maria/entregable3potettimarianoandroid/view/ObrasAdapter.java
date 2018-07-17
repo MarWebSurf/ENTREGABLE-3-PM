@@ -1,6 +1,7 @@
 package com.example.maria.entregable3potettimarianoandroid.view;
 
 import android.app.Fragment;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -100,36 +101,22 @@ public class ObrasAdapter extends RecyclerView.Adapter {
 
         public void cargarObra(Obra obra) {
             tituloObraTextView.setText(obra.getName());
-            if(TextUtils.isEmpty(obra.getRutaImagen())){
+
+            if (TextUtils.isEmpty(obra.getRutaImagen())) {
                 return;
             }
             FirebaseStorage storage = FirebaseStorage.getInstance();
             StorageReference reference = storage.getReference();
             reference = reference.child(obra.getRutaImagen());
-            //opcion 1
+            if (itemView.getContext() != null) {
 
-            try {
-                final File archivo = File.createTempFile("fotoandroid", "jpg");
-                final StorageReference finalReference = reference;
-                reference.getFile(archivo).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                        Glide.with(itemView.getContext())
-                                .using(new FirebaseImageLoader())
-                                .load(finalReference)
-                               // .placeholder(R.drawable.placeholder16_9)
-                                .error(R.drawable.error)
-                                .into(imageViewCelda);
-
-                        // Picasso.get().load(archivo.getAbsoluteFile()).into(imagenContacto);
-                    }
-
-                });
-            } catch (Exception e) {
-
-
+                Glide.with(itemView.getContext())
+                        .using(new FirebaseImageLoader())
+                        .load(reference)
+                        .placeholder(R.drawable.placeholder16_9)
+                        .error(R.drawable.error)
+                        .into(imageViewCelda);
             }
-
 
 
         }

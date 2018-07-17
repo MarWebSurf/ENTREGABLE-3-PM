@@ -36,7 +36,7 @@
         android:layout_gravity="center"
         android:layout_marginTop="5dp"
         android:layout_marginBottom="13dp"
-        android:src="@drawable/placeholder16_9"
+
         />
 </LinearLayout>
 

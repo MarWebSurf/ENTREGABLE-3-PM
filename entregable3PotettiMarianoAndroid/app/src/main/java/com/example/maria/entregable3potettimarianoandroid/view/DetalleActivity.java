@@ -85,6 +85,8 @@ public class DetalleActivity extends AppCompatActivity {
                     Glide.with(DetalleActivity.this)
                             .using(new FirebaseImageLoader())
                             .load(finalReference)
+                            .placeholder(R.drawable.placeholder16_9)
+                            .error(R.drawable.error)
                             .into(imageViewDetalle);
 
 
