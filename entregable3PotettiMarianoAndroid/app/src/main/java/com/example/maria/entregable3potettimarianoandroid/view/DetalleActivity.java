@@ -68,7 +68,7 @@ public class DetalleActivity extends AppCompatActivity {
     }
 
     private void traerImagenCuadroElegido(String rutaImagen) {
-        if(TextUtils.isEmpty(rutaImagen)){
+        if (TextUtils.isEmpty(rutaImagen)) {
             return;
         }
         FirebaseStorage storage = FirebaseStorage.getInstance();
@@ -88,10 +88,7 @@ public class DetalleActivity extends AppCompatActivity {
                             .placeholder(R.drawable.placeholder16_9)
                             .error(R.drawable.error)
                             .into(imageViewDetalle);
-
-
-
-                   // Picasso.get().load(archivo.getAbsoluteFile()).into(imagenContacto);
+                    // Picasso.get().load(archivo.getAbsoluteFile()).into(imagenContacto);
                 }
             });
         } catch (Exception e) {
@@ -118,8 +115,6 @@ public class DetalleActivity extends AppCompatActivity {
                             break;
                         }
                     }
-
-
                 } else {
                     Toast.makeText(DetalleActivity.this, "id inexistente", Toast.LENGTH_SHORT).show();
                 }

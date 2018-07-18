@@ -1,13 +1,9 @@
 package com.example.maria.entregable3potettimarianoandroid.view;
 
 import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.Signature;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -32,9 +28,6 @@ import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-
 public class LoginFaceBookActivity extends AppCompatActivity {
     TextView textView;
     //facebook
@@ -42,17 +35,23 @@ public class LoginFaceBookActivity extends AppCompatActivity {
     private LoginButton loginButton;
     //firebase
     private FirebaseAuth mAuth;
-    private Button cerrarSesionButton;
+    private Button ingresarSinSesionButton;
     //login entrar firebase nativo
     private EditText editTextMail;
     private EditText editTextPass;
     private Button botonCrear;
     private Button botonLogin;
 
+private Button botonCerrarFBactivity;
+    private TextView textViewMailLogueado;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_face_book);
+
+        textViewMailLogueado = findViewById(R.id.textview_logueado);
+        botonCerrarFBactivity = findViewById(R.id.cerrar_Sesion_facebookActivity);
         textView = findViewById(R.id.irAMainTemporario);
 
         textView.setOnClickListener(new View.OnClickListener() {
@@ -63,19 +62,27 @@ public class LoginFaceBookActivity extends AppCompatActivity {
             }
         });
 
-       // printHash();
+        // printHash();
 
         //firebase:
         mAuth = FirebaseAuth.getInstance();
         // if(Profile.getCurrentProfile() != null)  {
+
+
+        ingresarSinSesionButton = findViewById(R.id.ingresar_sin_iniciar_Sesion_button_id);
+
         if (mAuth.getCurrentUser() != null) {
             Intent intent = new Intent(LoginFaceBookActivity.this, MainActivity.class);
             startActivity(intent);
+            ingresarSinSesionButton.setVisibility(ingresarSinSesionButton.GONE);
+        }
+        if (mAuth.getCurrentUser() == null) {
+            ingresarSinSesionButton.setVisibility(ingresarSinSesionButton.VISIBLE);
         }
 //facebook login:
         callbackManager = CallbackManager.Factory.create();
         loginButton = (LoginButton) findViewById(R.id.login_button);
-        loginButton.setReadPermissions("email","public_profile");
+        loginButton.setReadPermissions("email", "public_profile");
 
         // If using in a fragment
         // loginButton.setFragment(this);
@@ -85,6 +92,7 @@ public class LoginFaceBookActivity extends AppCompatActivity {
             @Override
             public void onSuccess(LoginResult loginResult) {
                 handleFacebookAccessToken(loginResult.getAccessToken());
+                textViewMailLogueado.setVisibility(View.GONE);
 
                 Intent intent = new Intent(LoginFaceBookActivity.this, MainActivity.class);
                 startActivity(intent);
@@ -103,20 +111,35 @@ public class LoginFaceBookActivity extends AppCompatActivity {
         });
 
 //cerrar sesion firebase + cerrar sesion facebook
-        cerrarSesionButton = findViewById(R.id.cerrar_sesion_button_id);
-        cerrarSesionButton.setOnClickListener(new View.OnClickListener() {
+
+        ingresarSinSesionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (FirebaseAuth.getInstance().getCurrentUser() != null) {
-                    if (AccessToken.getCurrentAccessToken() != null) {
-                        //si es que esta logueado con facebook, tengo que desloguearlo
-                        LoginManager.getInstance().logOut();
+
+                Intent intent = new Intent(LoginFaceBookActivity.this, MainActivity.class);
+                startActivity(intent);
+
+            }
+        });
+
+        botonCerrarFBactivity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(mAuth.getCurrentUser() != null){
+
+                    if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+                        if (AccessToken.getCurrentAccessToken() != null) {
+                            //si es que esta logueado con facebook, tengo que desloguearlo
+                            LoginManager.getInstance().logOut();
+                        }
+                        //esto es para desloguearlo de firebase, ya se  que entro con facebok o nativo
+                        FirebaseAuth.getInstance().signOut();
+                        Toast.makeText(LoginFaceBookActivity.this, "sesion cerrada", Toast.LENGTH_SHORT).show();
+                        textViewMailLogueado.setVisibility(View.GONE);
+                        ingresarSinSesionButton.setVisibility(View.VISIBLE);
                     }
-                    //esto es para desloguearlo de firebase, ya se  que entro con facebok o nativo
-                    FirebaseAuth.getInstance().signOut();
-                    onBackPressed();
-
-
+                }else {
+                    Toast.makeText(LoginFaceBookActivity.this, "no hay sesion activa", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -131,8 +154,15 @@ public class LoginFaceBookActivity extends AppCompatActivity {
         botonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (validarContraseña(editTextPass.getText().toString()) && validarEmail(editTextMail.getText().toString())) {
+                if(mAuth.getCurrentUser() != null){
+                    Intent intent = new Intent(LoginFaceBookActivity.this, MainActivity.class);
+                    startActivity(intent);
+                }else if (validarContraseña(editTextPass.getText().toString()) && validarEmail(editTextMail.getText().toString())) {
                     loginUsuario(editTextMail.getText().toString(), editTextPass.getText().toString());
+                    if(mAuth.getCurrentUser() != null){
+                        Intent intent = new Intent(LoginFaceBookActivity.this, MainActivity.class);
+                        startActivity(intent);
+                    }
                 }
             }
         });
@@ -147,9 +177,7 @@ public class LoginFaceBookActivity extends AppCompatActivity {
         });
 
 
-
     }
-
 
 
     @Override
@@ -212,20 +240,22 @@ public class LoginFaceBookActivity extends AppCompatActivity {
                     }
                 });
     }
+
     private boolean validarContraseña(String string) {
         //TODO HARE LAS VALIDACIONES
         if (string.length() > 5) {
             return true;
-        }else{
-            Toast.makeText(LoginFaceBookActivity.this,"Ingrese contraseña con al menos 6 caracteres", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(LoginFaceBookActivity.this, "Ingrese contraseña con al menos 6 caracteres", Toast.LENGTH_SHORT).show();
             return false;
         }
     }
+
     private boolean validarEmail(String s) {
-        if(!editTextMail.getText().toString().isEmpty()){
+        if (!editTextMail.getText().toString().isEmpty()) {
             return true;
-        }else {
-            Toast.makeText(LoginFaceBookActivity.this,"Ingrese su email!!!", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(LoginFaceBookActivity.this, "Ingrese su email!!!", Toast.LENGTH_SHORT).show();
             return false;
         }
     }
@@ -238,6 +268,8 @@ public class LoginFaceBookActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
 
+                            textViewMailLogueado.setVisibility(View.VISIBLE);
+                            textViewMailLogueado.setText("Usuario : " + mAuth.getCurrentUser().getEmail());
                             FirebaseUser user = mAuth.getCurrentUser();
                             Intent intent = new Intent(LoginFaceBookActivity.this, MainActivity.class);
                             startActivity(intent);
@@ -254,9 +286,22 @@ public class LoginFaceBookActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+            textViewMailLogueado.setVisibility(View.VISIBLE);
+            ingresarSinSesionButton.setVisibility(View.GONE);
+            textViewMailLogueado.setText("Usuario : " + mAuth.getCurrentUser().getEmail());
+        }
 
+        if (FirebaseAuth.getInstance().getCurrentUser() == null && (Profile.getCurrentProfile() == null)) {
+            ingresarSinSesionButton.setVisibility(View.VISIBLE);
 
-  /*  private void printHash() {
+        }
+    }
+
+    /*  private void printHash() {
         try {
 
             PackageInfo info =

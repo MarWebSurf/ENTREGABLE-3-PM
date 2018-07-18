@@ -113,12 +113,10 @@ public class ObrasAdapter extends RecyclerView.Adapter {
                 Glide.with(itemView.getContext())
                         .using(new FirebaseImageLoader())
                         .load(reference)
-                        .placeholder(R.drawable.placeholder16_9)
+                        //.placeholder(R.drawable.placeholder16_9)
                         .error(R.drawable.error)
                         .into(imageViewCelda);
             }
-
-
         }
     }
 

@@ -22,12 +22,13 @@
         android:id="@+id/text_view_celda_obra"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        tools:text="obras de arte"
+        android:gravity="center|top"
+        tools:text="Obras de arte"
         android:textSize="25sp"
         android:textColor="@color/colorBlackYellow"
         android:fontFamily="serif"
-        android:layout_marginTop="5dp"/>
+        android:layout_marginTop="5dp"
+        android:padding="5dp"/>
 
     <ImageView
         android:id="@+id/imagen_obra_celda"
@@ -35,8 +36,7 @@
         android:layout_height="160dp"
         android:layout_gravity="center"
         android:layout_marginTop="5dp"
-        android:layout_marginBottom="13dp"
-
+        android:padding="10dp"
         />
 </LinearLayout>
 
