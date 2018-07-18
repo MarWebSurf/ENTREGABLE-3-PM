@@ -14,6 +14,8 @@ import com.example.maria.entregable3potettimarianoandroid.model.POJO.Artista;
 import com.example.maria.entregable3potettimarianoandroid.model.POJO.Obra;
 import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -37,16 +39,21 @@ public class DetalleActivity extends AppCompatActivity {
     private TextView textViewDetalleNacionalidad;
     private TextView textViewDetalleInfluenced_By;
 
-
+    private FirebaseAuth mAuth;
     FirebaseDatabase database;
 
-    Obra obraRecibidaPorBundleDesdeRecyclerMainActivity;
+    private Obra obraRecibidaPorBundleDesdeRecyclerMainActivity;
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detalle);
+        mAuth = FirebaseAuth.getInstance();
+        if(mAuth.getCurrentUser() == null){
+            Toast.makeText(this, "Registrate para ver los cuadros en detalle!", Toast.LENGTH_SHORT).show();
+        }
 
         database = FirebaseDatabase.getInstance();
 

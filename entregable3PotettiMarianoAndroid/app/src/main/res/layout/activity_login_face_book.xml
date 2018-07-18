@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.LoginFaceBookActivity">
+    tools:context=".view.LoginFaceBookActivity"
+    android:background="@color/colorCard">
 
 
     <LinearLayout
@@ -23,15 +24,6 @@
             android:textColor="@color/colorBlackYellow"
             android:textSize="15sp"
             tools:text="usuario : sanpedrodelmonte@xxxxxxxx.com" />
-
-
-        <TextView
-            android:id="@+id/irAMainTemporario"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="right"
-            android:text="ir a main"
-            android:textSize="25sp" />
 
 
         <EditText

@@ -29,7 +29,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 public class LoginFaceBookActivity extends AppCompatActivity {
-    TextView textView;
+
     //facebook
     private CallbackManager callbackManager;
     private LoginButton loginButton;
@@ -42,7 +42,7 @@ public class LoginFaceBookActivity extends AppCompatActivity {
     private Button botonCrear;
     private Button botonLogin;
 
-private Button botonCerrarFBactivity;
+    private Button botonCerrarFBactivity;
     private TextView textViewMailLogueado;
 
     @Override
@@ -52,23 +52,13 @@ private Button botonCerrarFBactivity;
 
         textViewMailLogueado = findViewById(R.id.textview_logueado);
         botonCerrarFBactivity = findViewById(R.id.cerrar_Sesion_facebookActivity);
-        textView = findViewById(R.id.irAMainTemporario);
-
-        textView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(LoginFaceBookActivity.this, MainActivity.class);
-                startActivity(intent);
-            }
-        });
 
         // printHash();
 
         //firebase:
         mAuth = FirebaseAuth.getInstance();
         // if(Profile.getCurrentProfile() != null)  {
-
-
+        
         ingresarSinSesionButton = findViewById(R.id.ingresar_sin_iniciar_Sesion_button_id);
 
         if (mAuth.getCurrentUser() != null) {
@@ -125,7 +115,7 @@ private Button botonCerrarFBactivity;
         botonCerrarFBactivity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(mAuth.getCurrentUser() != null){
+                if (mAuth.getCurrentUser() != null) {
 
                     if (FirebaseAuth.getInstance().getCurrentUser() != null) {
                         if (AccessToken.getCurrentAccessToken() != null) {
@@ -138,7 +128,7 @@ private Button botonCerrarFBactivity;
                         textViewMailLogueado.setVisibility(View.GONE);
                         ingresarSinSesionButton.setVisibility(View.VISIBLE);
                     }
-                }else {
+                } else {
                     Toast.makeText(LoginFaceBookActivity.this, "no hay sesion activa", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -154,12 +144,12 @@ private Button botonCerrarFBactivity;
         botonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(mAuth.getCurrentUser() != null){
+                if (mAuth.getCurrentUser() != null) {
                     Intent intent = new Intent(LoginFaceBookActivity.this, MainActivity.class);
                     startActivity(intent);
-                }else if (validarContraseña(editTextPass.getText().toString()) && validarEmail(editTextMail.getText().toString())) {
+                } else if (validarContraseña(editTextPass.getText().toString()) && validarEmail(editTextMail.getText().toString())) {
                     loginUsuario(editTextMail.getText().toString(), editTextPass.getText().toString());
-                    if(mAuth.getCurrentUser() != null){
+                    if (mAuth.getCurrentUser() != null) {
                         Intent intent = new Intent(LoginFaceBookActivity.this, MainActivity.class);
                         startActivity(intent);
                     }
@@ -297,6 +287,7 @@ private Button botonCerrarFBactivity;
 
         if (FirebaseAuth.getInstance().getCurrentUser() == null && (Profile.getCurrentProfile() == null)) {
             ingresarSinSesionButton.setVisibility(View.VISIBLE);
+            textViewMailLogueado.setVisibility(View.GONE);
 
         }
     }
