@@ -1,6 +1,7 @@
 package com.example.maria.entregable3potettimarianoandroid.view;
 
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -13,6 +14,7 @@ import com.example.maria.entregable3potettimarianoandroid.R;
 import com.example.maria.entregable3potettimarianoandroid.model.POJO.Artista;
 import com.example.maria.entregable3potettimarianoandroid.model.POJO.Obra;
 import com.firebase.ui.storage.images.FirebaseImageLoader;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -45,14 +47,13 @@ public class DetalleActivity extends AppCompatActivity {
     private Obra obraRecibidaPorBundleDesdeRecyclerMainActivity;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detalle);
         mAuth = FirebaseAuth.getInstance();
-        if(mAuth.getCurrentUser() == null){
-            Toast.makeText(this, "Registrate para ver los cuadros en detalle!", Toast.LENGTH_SHORT).show();
+        if (mAuth.getCurrentUser() == null) {
+            Toast.makeText(this, "Registrate para ver siempre todos los cuadros en detalle!", Toast.LENGTH_SHORT).show();
         }
 
         database = FirebaseDatabase.getInstance();
@@ -97,11 +98,26 @@ public class DetalleActivity extends AppCompatActivity {
                             .into(imageViewDetalle);
                     // Picasso.get().load(archivo.getAbsoluteFile()).into(imagenContacto);
                 }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+
+                    // imageViewDetalle.setImageResource(R.drawable.error);
+                    //iba a dejar la linea de arriba pero me di cuenta que usando el glide
+                    // si ya vi alguna vez las pinturas persisten en cache y las muestra con glide aun sin loguearse..
+
+                    imageViewDetalle.setImageResource(R.drawable.error);
+                    Glide.with(DetalleActivity.this)
+                            .using(new FirebaseImageLoader())
+                            .load(finalReference)
+                            .placeholder(R.drawable.placeholder16_9)
+                            .error(R.drawable.error)
+                            .into(imageViewDetalle);
+                }
             });
         } catch (Exception e) {
 
         }
-
     }
 
 

@@ -108,7 +108,7 @@ public class ObrasAdapter extends RecyclerView.Adapter {
             FirebaseStorage storage = FirebaseStorage.getInstance();
             StorageReference reference = storage.getReference();
             reference = reference.child(obra.getRutaImagen());
-            if (itemView.getContext() != null) {
+
 
                 Glide.with(itemView.getContext())
                         .using(new FirebaseImageLoader())
@@ -117,7 +117,7 @@ public class ObrasAdapter extends RecyclerView.Adapter {
                         //POR MAS QUE LA FOTO SEA FORMATO 4:3 Y LA DEFORMA .placeholder(R.drawable.placeholder16_9)
                         .error(R.drawable.error)
                         .into(imageViewCelda);
-            }
+
         }
     }
 
