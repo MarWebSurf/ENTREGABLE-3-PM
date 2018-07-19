@@ -48,7 +48,6 @@ public class DetalleActivity extends AppCompatActivity {
     private Obra obraRecibidaPorBundleDesdeRecyclerMainActivity;
     private ControllerArtistaDatabase controllerArtistaDatabase;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
