@@ -58,7 +58,7 @@ public class LoginFaceBookActivity extends AppCompatActivity {
         //firebase:
         mAuth = FirebaseAuth.getInstance();
         // if(Profile.getCurrentProfile() != null)  {
-        
+
         ingresarSinSesionButton = findViewById(R.id.ingresar_sin_iniciar_Sesion_button_id);
 
         if (mAuth.getCurrentUser() != null) {
@@ -125,7 +125,7 @@ public class LoginFaceBookActivity extends AppCompatActivity {
                         //esto es para desloguearlo de firebase, ya se  que entro con facebok o nativo
                         FirebaseAuth.getInstance().signOut();
                         Toast.makeText(LoginFaceBookActivity.this, "sesion cerrada", Toast.LENGTH_SHORT).show();
-                        textViewMailLogueado.setVisibility(View.GONE);
+                        textViewMailLogueado.setVisibility(View.INVISIBLE);
                         ingresarSinSesionButton.setVisibility(View.VISIBLE);
                     }
                 } else {

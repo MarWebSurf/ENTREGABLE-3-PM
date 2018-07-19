@@ -113,7 +113,8 @@ public class ObrasAdapter extends RecyclerView.Adapter {
                 Glide.with(itemView.getContext())
                         .using(new FirebaseImageLoader())
                         .load(reference)
-                        //.placeholder(R.drawable.placeholder16_9)
+                        //NO USO EL VIEW HOLDER PORQUE LA PRIMER VEZ QUE CARGA EL RECYCLER LE PONE EL FORMATO(16:9) DE LA FOTO DE PLACEHOLDER
+                        //POR MAS QUE LA FOTO SEA FORMATO 4:3 Y LA DEFORMA .placeholder(R.drawable.placeholder16_9)
                         .error(R.drawable.error)
                         .into(imageViewCelda);
             }

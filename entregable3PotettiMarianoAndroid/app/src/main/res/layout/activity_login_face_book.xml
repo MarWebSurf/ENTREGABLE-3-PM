@@ -10,19 +10,20 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:id="@+id/linearLogin">
 
         <TextView
             android:id="@+id/textview_logueado"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            android:fontFamily="serif"
+            android:fontFamily="sans-serif"
             android:gravity="center"
-            android:padding="5dp"
+            android:padding="3dp"
             android:textColor="@color/colorBlackYellow"
-            android:textSize="15sp"
+            android:textSize="14sp"
             tools:text="usuario : sanpedrodelmonte@xxxxxxxx.com" />
 
 
@@ -65,16 +66,25 @@
             android:layout_marginTop="30dp"
             />
 
-
-
     </LinearLayout>
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:src="@drawable/moma"
+        android:layout_below="@+id/linearLogin"
+        android:layout_above="@+id/linearBotonesCerrarIngresar"
+        android:layout_marginBottom="10dp"
+        android:scaleType="fitXY"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:baselineAligned="true"
         android:gravity="center"
         android:orientation="horizontal"
-        android:layout_alignParentBottom="true">
+        android:layout_alignParentBottom="true"
+        android:id="@+id/linearBotonesCerrarIngresar"
+        >
+
 
         <Button
             android:id="@+id/ingresar_sin_iniciar_Sesion_button_id"

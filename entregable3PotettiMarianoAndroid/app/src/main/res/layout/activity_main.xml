@@ -5,9 +5,8 @@
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.MainActivity"
-
-    >
+    android:background="@color/colorCardFondoRecYcler"
+    tools:context=".view.MainActivity">
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -16,8 +15,7 @@
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recyclerview"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            >
+            android:layout_height="match_parent">
 
         </android.support.v7.widget.RecyclerView>
 

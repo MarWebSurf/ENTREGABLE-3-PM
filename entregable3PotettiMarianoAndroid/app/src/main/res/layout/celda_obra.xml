@@ -5,14 +5,15 @@
     android:id="@+id/celda_Obra"
     android:layout_width="match_parent"
     android:layout_height="250dp"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@color/colorCardFondoRecYcler">
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:cardElevation="5dp"
         app:cardCornerRadius="10dp"
-        app:cardBackgroundColor="@color/colorCard"
+        app:cardBackgroundColor="@color/colorCardClaro"
         android:layout_margin="5dp">
 <LinearLayout
     android:layout_width="match_parent"
