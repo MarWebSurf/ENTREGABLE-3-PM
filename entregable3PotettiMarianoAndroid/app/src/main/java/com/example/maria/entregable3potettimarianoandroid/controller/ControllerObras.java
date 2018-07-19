@@ -29,7 +29,7 @@ public class ControllerObras {
                 }
             });
         } else {
-            Log.i("naranja,", ", no hay internet iria room");//iria room , puse ese log que probe y muestra esos strings en la consola de debug
+            Log.i("naranja,", ", no hay internet, iria room");//iria room , puse ese log que probe y muestra esos strings en la consola de debug
 
         }
     }
