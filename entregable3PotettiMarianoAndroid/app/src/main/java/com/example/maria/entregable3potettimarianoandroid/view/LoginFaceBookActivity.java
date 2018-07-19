@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.example.maria.entregable3potettimarianoandroid.R;
 import com.facebook.AccessToken;
+import com.facebook.AccessTokenTracker;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -33,6 +34,10 @@ public class LoginFaceBookActivity extends AppCompatActivity {
     //facebook
     private CallbackManager callbackManager;
     private LoginButton loginButton;
+
+    private TextView textViewMailLogueado;
+    private Button botonCerrarFBactivity;
+    private AccessTokenTracker fbTracker;
     //firebase
     private FirebaseAuth mAuth;
     private Button ingresarSinSesionButton;
@@ -42,8 +47,6 @@ public class LoginFaceBookActivity extends AppCompatActivity {
     private Button botonCrear;
     private Button botonLogin;
 
-    private Button botonCerrarFBactivity;
-    private TextView textViewMailLogueado;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,9 +55,7 @@ public class LoginFaceBookActivity extends AppCompatActivity {
 
         textViewMailLogueado = findViewById(R.id.textview_logueado);
         botonCerrarFBactivity = findViewById(R.id.cerrar_Sesion_facebookActivity);
-
         // printHash();
-
         //firebase:
         mAuth = FirebaseAuth.getInstance();
         // if(Profile.getCurrentProfile() != null)  {
@@ -74,10 +75,8 @@ public class LoginFaceBookActivity extends AppCompatActivity {
         loginButton = (LoginButton) findViewById(R.id.login_button);
         loginButton.setReadPermissions("email", "public_profile");
 
-        // If using in a fragment
-        // loginButton.setFragment(this);
 
-        // Callback registration
+// Callback registration
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
@@ -100,7 +99,7 @@ public class LoginFaceBookActivity extends AppCompatActivity {
             }
         });
 
-//cerrar sesion firebase + cerrar sesion facebook
+
 
         ingresarSinSesionButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -111,6 +110,8 @@ public class LoginFaceBookActivity extends AppCompatActivity {
 
             }
         });
+
+ //cerrar sesion firebase + cerrar sesion facebook
 
         botonCerrarFBactivity.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -166,6 +167,29 @@ public class LoginFaceBookActivity extends AppCompatActivity {
             }
         });
 
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//salir de facebook + salir firebase: metodo para escuchar que al salir de facebook con el boton propio azul de facebook tambien se desloguee de firebase
+// ya que queda logueado con firebase de lo contrario
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        salirDeFacebookYFireBaseConSalirDelBotonDeFacebook();
+
+    }
+
+
+
+    public void salirDeFacebookYFireBaseConSalirDelBotonDeFacebook(){
+        fbTracker = new AccessTokenTracker() {
+            @Override
+            protected void onCurrentAccessTokenChanged(AccessToken accessToken, AccessToken accessToken2) {
+                if (accessToken2 == null) {
+                    Log.d("FB", "User Logged Out.");
+                    FirebaseAuth.getInstance().signOut();
+                    Toast.makeText(LoginFaceBookActivity.this, "sesion cerrada", Toast.LENGTH_SHORT).show();
+                    textViewMailLogueado.setVisibility(View.INVISIBLE);
+                    ingresarSinSesionButton.setVisibility(View.VISIBLE);
+                }
+            }
+        };
 
     }
 
@@ -178,11 +202,8 @@ public class LoginFaceBookActivity extends AppCompatActivity {
 
     private void handleFacebookAccessToken(AccessToken token) {
 
-
         AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
-
         //AuthCredential credential = GoogleAuthProvider.getCredential(googleIdToken, null);
-
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -196,14 +217,12 @@ public class LoginFaceBookActivity extends AppCompatActivity {
                             // If sign in fails, display a message to the user.
                             Toast.makeText(LoginFaceBookActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
-
                         }
-
                         // ...
                     }
                 });
-    }
 
+    }
 
     private void crearUsuario(String email, String password) {
         mAuth.createUserWithEmailAndPassword(email, password)
@@ -269,11 +288,9 @@ public class LoginFaceBookActivity extends AppCompatActivity {
                                     Toast.LENGTH_SHORT).show();
 
                         }
-
                         // ...
                     }
                 });
-
     }
 
     @Override
@@ -288,8 +305,9 @@ public class LoginFaceBookActivity extends AppCompatActivity {
         if (FirebaseAuth.getInstance().getCurrentUser() == null && (Profile.getCurrentProfile() == null)) {
             ingresarSinSesionButton.setVisibility(View.VISIBLE);
             textViewMailLogueado.setVisibility(View.GONE);
-
         }
+
+
     }
 
     /*  private void printHash() {

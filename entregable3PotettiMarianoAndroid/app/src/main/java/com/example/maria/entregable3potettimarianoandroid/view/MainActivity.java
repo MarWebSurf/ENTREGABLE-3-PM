@@ -33,6 +33,7 @@ public class MainActivity extends AppCompatActivity implements ObrasAdapter.Noti
     private DrawerLayout drawerLayout;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,7 +44,7 @@ public class MainActivity extends AppCompatActivity implements ObrasAdapter.Noti
         recyclerView.setHasFixedSize(true);
         adapter = new ObrasAdapter(this);
         recyclerView.setAdapter(adapter);
-        controllerObras = new ControllerObras();
+        controllerObras = new ControllerObras(this);
         ObtenerObras();
         navigationView = findViewById(R.id.navigationView);
         drawerLayout = findViewById(R.id.drawer_layout);

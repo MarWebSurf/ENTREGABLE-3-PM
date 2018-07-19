@@ -1,5 +1,6 @@
 package com.example.maria.entregable3potettimarianoandroid.view;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -11,13 +12,15 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.maria.entregable3potettimarianoandroid.R;
+import com.example.maria.entregable3potettimarianoandroid.controller.ControllerArtistaDatabase;
 import com.example.maria.entregable3potettimarianoandroid.model.POJO.Artista;
 import com.example.maria.entregable3potettimarianoandroid.model.POJO.Obra;
+import com.example.maria.entregable3potettimarianoandroid.model.dao.Respuesta;
+import com.example.maria.entregable3potettimarianoandroid.utils.ResultListener;
 import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -28,13 +31,11 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
 public class DetalleActivity extends AppCompatActivity {
 
     public static final String CLAVE_OBRA = "clave obra";
-    private static final String ARTISTA = "artists";
+
     private TextView textViewDetalleNombreObra;
     private ImageView imageViewDetalle;
     private TextView textViewDetalleNombreArtista;
@@ -45,6 +46,7 @@ public class DetalleActivity extends AppCompatActivity {
     FirebaseDatabase database;
 
     private Obra obraRecibidaPorBundleDesdeRecyclerMainActivity;
+    private ControllerArtistaDatabase controllerArtistaDatabase;
 
 
     @Override
@@ -69,7 +71,8 @@ public class DetalleActivity extends AppCompatActivity {
         obraRecibidaPorBundleDesdeRecyclerMainActivity = (Obra) bundleRecibido.getSerializable(CLAVE_OBRA);
         textViewDetalleNombreObra.setText(obraRecibidaPorBundleDesdeRecyclerMainActivity.getName());
 
-        traerArtistaPorId(obraRecibidaPorBundleDesdeRecyclerMainActivity.getArtistId());
+        controllerArtistaDatabase = new ControllerArtistaDatabase(this);
+        traerArtistaPorIdDataBase(obraRecibidaPorBundleDesdeRecyclerMainActivity.getArtistId());
         traerImagenCuadroElegido(obraRecibidaPorBundleDesdeRecyclerMainActivity.getRutaImagen());
 
 
@@ -121,35 +124,27 @@ public class DetalleActivity extends AppCompatActivity {
     }
 
 
-    public void traerArtistaPorId(final String artistIdObraRecibidaPorBundle) {
-        DatabaseReference reference = database.getReference().child(ARTISTA);
-        reference.addValueEventListener(new ValueEventListener() {
+    public void traerArtistaPorIdDataBase(final String artistIdObraRecibidaPorBundle) {
+
+        controllerArtistaDatabase.obtenerDatosArtistaDatabase(artistIdObraRecibidaPorBundle, new ResultListener<Respuesta>() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    //List<Artista> artistaArrayList = new ArrayList<>();
-                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                        Artista artista = snapshot.getValue(Artista.class);
-                        if (artista.getArtistId().equals(artistIdObraRecibidaPorBundle)) {
-                            //artistaArrayList.add(artista);
-                            textViewDetalleNombreArtista.setText(artista.getName());
-                            textViewDetalleNacionalidad.setText(artista.getNationality());
-                            textViewDetalleInfluenced_By.setText(artista.getInfluenced_by());
-                            break;
-                        }
-                    }
+            public void finish(Respuesta resultado) {
+                if (resultado.getArtista() != null) {
+                    setearArtista(resultado.getArtista());
+
                 } else {
-                    Toast.makeText(DetalleActivity.this, "id inexistente", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(DetalleActivity.this, resultado.getError(), Toast.LENGTH_SHORT).show();
                 }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(DetalleActivity.this, "error, intente nuevamente", Toast.LENGTH_SHORT).show();
-
             }
         });
 
+
+    }
+
+    public void setearArtista(Artista artista) {
+        textViewDetalleNombreArtista.setText(artista.getName());
+        textViewDetalleNacionalidad.setText(artista.getNationality());
+        textViewDetalleInfluenced_By.setText(artista.getInfluenced_by());
     }
 
 
