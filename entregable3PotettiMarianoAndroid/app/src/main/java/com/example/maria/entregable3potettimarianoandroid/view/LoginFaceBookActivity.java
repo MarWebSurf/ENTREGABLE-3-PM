@@ -61,10 +61,11 @@ public class LoginFaceBookActivity extends AppCompatActivity {
         // if(Profile.getCurrentProfile() != null)  {
 
         ingresarSinSesionButton = findViewById(R.id.ingresar_sin_iniciar_Sesion_button_id);
-
+//si esta logueado un usuario , saltea la activity del login y va al activity Main del recycler
         if (mAuth.getCurrentUser() != null) {
             Intent intent = new Intent(LoginFaceBookActivity.this, MainActivity.class);
             startActivity(intent);
+
             ingresarSinSesionButton.setVisibility(ingresarSinSesionButton.GONE);
         }
         if (mAuth.getCurrentUser() == null) {
@@ -100,7 +101,6 @@ public class LoginFaceBookActivity extends AppCompatActivity {
         });
 
 
-
         ingresarSinSesionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -111,7 +111,7 @@ public class LoginFaceBookActivity extends AppCompatActivity {
             }
         });
 
- //cerrar sesion firebase + cerrar sesion facebook
+        //cerrar sesion firebase + cerrar sesion facebook
 
         botonCerrarFBactivity.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -145,15 +145,9 @@ public class LoginFaceBookActivity extends AppCompatActivity {
         botonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mAuth.getCurrentUser() != null) {
-                    Intent intent = new Intent(LoginFaceBookActivity.this, MainActivity.class);
-                    startActivity(intent);
-                } else if (validarContraseña(editTextPass.getText().toString()) && validarEmail(editTextMail.getText().toString())) {
+
+                if (validarContraseña(editTextPass.getText().toString()) && validarEmail(editTextMail.getText().toString())) {
                     loginUsuario(editTextMail.getText().toString(), editTextPass.getText().toString());
-                    if (mAuth.getCurrentUser() != null) {
-                        Intent intent = new Intent(LoginFaceBookActivity.this, MainActivity.class);
-                        startActivity(intent);
-                    }
                 }
             }
         });
@@ -176,15 +170,13 @@ public class LoginFaceBookActivity extends AppCompatActivity {
     }
 
 
-
-    public void salirDeFacebookYFireBaseConSalirDelBotonDeFacebook(){
+    public void salirDeFacebookYFireBaseConSalirDelBotonDeFacebook() {
         fbTracker = new AccessTokenTracker() {
             @Override
             protected void onCurrentAccessTokenChanged(AccessToken accessToken, AccessToken accessToken2) {
                 if (accessToken2 == null) {
                     Log.d("FB", "User Logged Out.");
                     FirebaseAuth.getInstance().signOut();
-                    Toast.makeText(LoginFaceBookActivity.this, "sesion cerrada", Toast.LENGTH_SHORT).show();
                     textViewMailLogueado.setVisibility(View.INVISIBLE);
                     ingresarSinSesionButton.setVisibility(View.VISIBLE);
                 }
@@ -225,17 +217,29 @@ public class LoginFaceBookActivity extends AppCompatActivity {
     }
 
     private void crearUsuario(String email, String password) {
+        if (mAuth.getCurrentUser() != null) {
+            if (AccessToken.getCurrentAccessToken() != null) {
+                //si es que esta logueado con facebook, tengo que desloguearlo
+                LoginManager.getInstance().logOut();
+            }
+        }
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
+                           /* if (AccessToken.getCurrentAccessToken() != null) {
+                                //si es que esta logueado con facebook, tengo que desloguearlo
+                                LoginManager.getInstance().logOut();
+                            }*/
                             // si entra aca es porque se creo la cuenta exitosamente
                             Log.d("firebase", "createUserWithEmail:success");
+
                             FirebaseUser user = mAuth.getCurrentUser();
+
+                            textViewMailLogueado.setText("Usuario : " + mAuth.getCurrentUser().getEmail());
                             Intent intent = new Intent(LoginFaceBookActivity.this, MainActivity.class);
                             startActivity(intent);
-
 
                         } else {
                             // si entra aca es porque NO se creo la cuenta exitosamente
@@ -270,6 +274,12 @@ public class LoginFaceBookActivity extends AppCompatActivity {
     }
 
     private void loginUsuario(String email, String password) {
+        if (mAuth.getCurrentUser() != null) {
+            if (AccessToken.getCurrentAccessToken() != null) {
+                //si es que esta logueado con facebook, tengo que desloguearlo
+                LoginManager.getInstance().logOut();
+            }
+        }
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -278,8 +288,11 @@ public class LoginFaceBookActivity extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
 
                             textViewMailLogueado.setVisibility(View.VISIBLE);
+
+                            mAuth.getCurrentUser();
+
                             textViewMailLogueado.setText("Usuario : " + mAuth.getCurrentUser().getEmail());
-                            FirebaseUser user = mAuth.getCurrentUser();
+                            // FirebaseUser user = mAuth.getCurrentUser();
                             Intent intent = new Intent(LoginFaceBookActivity.this, MainActivity.class);
                             startActivity(intent);
                         } else {
